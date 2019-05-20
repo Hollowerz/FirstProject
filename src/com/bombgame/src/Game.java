@@ -15,7 +15,11 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     private Player p;
     private Player p2;
     private boolean right, left, up, down;
-    private Map map;
+    int speedX = 0;
+    int ny = 0;
+    int nx = 0;
+
+    Map map;
 
 
     public Game() {
@@ -96,8 +100,6 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         int tempX = p.x;
         int tempY = p.y;
         int pSpeed = 2;
-        int ny = 0;
-        int nx = 0;
 
         if (right) nx += pSpeed;
         if (left) nx -= pSpeed;
@@ -117,7 +119,6 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         Rectangle rect = new Rectangle(nx, ny, 40, 40);
         return (rect.intersects(p2.fields()));
     }
-
 
 
 }
