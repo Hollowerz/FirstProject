@@ -10,23 +10,18 @@ import java.awt.event.KeyListener;
 
 public class Game extends JPanel implements ActionListener, KeyListener {
 
-
     private Timer gameLoopTimer = new Timer(10, this);
-    private Player p;
-    private Player p2;
-    private boolean right, left, up, down;
-    int speedX = 0;
-    int ny = 0;
-    int nx = 0;
+    private Player player;
+    private Player bot;
+    private Direction direction;
 
-    Map map;
-
+    private Map map;
 
     public Game() {
         setFocusable(true);
         gameLoopTimer.start();
-        p = new Player(100, 100);
-        p2 = new Player(160, 160);
+        player = new Player(100, 100);
+        bot = new Player(160, 160);
         map = new Map();
         addKeyListener(this);
 
@@ -47,78 +42,46 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         Graphics2D g2d = (Graphics2D) g;
 
         setBackground(Color.DARK_GRAY);
-        p2.draw(g2d);
-        p.draw(g2d);
+        bot.draw(g2d);
+        player.draw(g2d);
         map.draw(g2d);
 
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         repaint();
-        moveLogic();
-        p.update();
+        if (!player.willCollide(direction, bot)) {
+            player.move(direction);
+        }
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-
-
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
     public void keyPressed(KeyEvent e) {
-
         int key = e.getKeyCode();
-        if (key == KeyEvent.VK_LEFT) {
-            left = true;
-        } else if (key == KeyEvent.VK_RIGHT) {
-            right = true;
-        } else if (key == KeyEvent.VK_DOWN) {
-            down = true;
-        } else if (key == KeyEvent.VK_UP) {
-            up = true;
+        switch (key) {
+            case KeyEvent.VK_LEFT:
+                direction = Direction.LEFT;
+                break;
+            case KeyEvent.VK_RIGHT:
+                direction = Direction.RIGHT;
+                break;
+            case KeyEvent.VK_DOWN:
+                direction = Direction.DOWN;
+                break;
+            case KeyEvent.VK_UP:
+                direction = Direction.UP;
+                break;
+            default:
+                direction = null;
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        int key = e.getKeyCode();
-        if (key == KeyEvent.VK_LEFT) {
-            left = false;
-        } else if (key == KeyEvent.VK_RIGHT) {
-            right = false;
-        } else if (key == KeyEvent.VK_DOWN) {
-            down = false;
-        } else if (key == KeyEvent.VK_UP) {
-            up = false;
-        }
+        direction = null;
     }
-
-    public void moveLogic() {
-        int tempX = p.x;
-        int tempY = p.y;
-        int pSpeed = 2;
-
-        if (right) nx += pSpeed;
-        if (left) nx -= pSpeed;
-        if (up) ny -= pSpeed;
-        if (down) ny += pSpeed;
-        if (!collision(nx, ny)) {
-            p.update(nx, ny);
-        }
-        if (collision(nx, ny)) {
-            p.update(tempX, tempY);
-        }
-
-    }
-
-
-    public boolean collision(int nx, int ny) {
-        Rectangle rect = new Rectangle(nx, ny, 40, 40);
-        return (rect.intersects(p2.fields()));
-    }
-
-
 }

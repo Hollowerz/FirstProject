@@ -2,7 +2,7 @@ package com.bombgame.src;
 
 import java.awt.*;
 
-public class Map  {
+public class Map {
 
     private static final int sizeOfMap = 10;
     private static final int sizeOfTile = 40;
@@ -10,18 +10,16 @@ public class Map  {
     private static final int BLOCKED = 1;
 
     public Map() {
-
         for (int x = 0; x < sizeOfMap; x++) {
             for (int y = 0; y < sizeOfMap; y++) {
                 map[0][y] = BLOCKED;
+                map[y][0] = BLOCKED;
             }
         }
     }
 
 
     public void draw(Graphics2D g2d) {
-
-
         for (int x = 0; x < sizeOfMap; x++) {
             for (int y = 0; y < sizeOfMap; y++) {
                 if (map[x][y] == BLOCKED) {
@@ -30,13 +28,8 @@ public class Map  {
                     g2d.setColor(Color.BLACK);
                     g2d.drawRect(x * sizeOfTile, y * sizeOfTile, sizeOfTile, sizeOfTile);
                 }
-
-
             }
         }
 
     }
-
-
-
 }
