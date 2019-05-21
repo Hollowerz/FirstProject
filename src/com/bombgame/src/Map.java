@@ -136,29 +136,32 @@ public class Map {
 
     public void explode(int x, int y) {
         nowExploding = true;
-        //map[x][y] = EXPLODE_WAVE;
+        map[x][y] = EXPLODE_WAVE;
         for (int j = 0; j < BOMB_EXPLODE_RADIUS; j++) {
             if (map[x - j][y] != BLOCKED) {
-                map[x - j][y] = EXPLODE_WAVE;
-            } else break;
+                map[x - j][y] = EXPLODE_WAVE;}
+            else break; }
+        for (int j = 0; j <BOMB_EXPLODE_RADIUS; j++) {
             if (map[x + j][y] != BLOCKED) {
                 map[x + j][y] = EXPLODE_WAVE;
-            } else break;
+            } else  break;
+        }
 
-        } for (int k = 0; k < BOMB_EXPLODE_RADIUS; k++){
+        for (int k = 0; k < BOMB_EXPLODE_RADIUS; k++) {
             if (map[x][y - k] != BLOCKED) {
                 map[x][y - k] = EXPLODE_WAVE;
             } else break;
+        }
+        for (int k = 0; k < BOMB_EXPLODE_RADIUS; k++ ){
             if (map[x][y + k] != BLOCKED) {
                 map[x][y + k] = EXPLODE_WAVE;
             } else break;
-
         }
         Runnable explodeBomb = () -> {
 
             for (int kolumna = 0; kolumna < MAP_SIZE; kolumna++) {
                 for (int wiersz = 0; wiersz < MAP_SIZE; wiersz++) {
-                    if(map[kolumna][wiersz] == EXPLODE_WAVE) map[kolumna][wiersz] = CLEAR;
+                    if (map[kolumna][wiersz] == EXPLODE_WAVE) map[kolumna][wiersz] = CLEAR;
                 }
             }
             explosion.clear();
@@ -167,9 +170,19 @@ public class Map {
         };
         executor.schedule(explodeBomb, 1, TimeUnit.SECONDS);
     }
+
     private Image getBoomImage() {
         ImageIcon i = new ImageIcon(getClass().getResource(BOOM_IMAGE_PATH));
         return i.getImage();
+    }
+
+    public boolean collideExplosion(Rectangle player) {
+        boolean collide = false;
+
+        for (Rectangle explosion : explosion) {
+            if (explosion.intersects(player)) collide = true;
+        }
+        return collide;
     }
 
 

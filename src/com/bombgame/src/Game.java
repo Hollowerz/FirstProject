@@ -61,8 +61,16 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             }
             if ((player.willCollide(direction, bot))) {
                 gameRunning = false;
-                JOptionPane.showMessageDialog(null, "Вы сделали кусь, спасибо!");
+                JOptionPane.showMessageDialog(null, "YOU DEAD");
 
+            }
+            if (map.collideExplosion(player.getCollider())){
+                gameRunning = false;
+                JOptionPane.showMessageDialog(null, "GAME OVER" );
+            }
+            if (map.collideExplosion(bot.getCollider())){
+                gameRunning = false;
+                JOptionPane.showMessageDialog(null, "PLAYER 1 WINS" );
             }
         }
 
