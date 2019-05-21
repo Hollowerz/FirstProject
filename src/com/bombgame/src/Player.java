@@ -9,7 +9,7 @@ public class Player implements Interactable {
     private static final int PLAYER_WIDTH = 35;
     private static final int PLAYER_HEIGHT = 35;
     private Position position;
-    private int speed = 3;
+    private int speed = 2;
 
     public Player(int x, int y) {
         position = new Position(x, y);

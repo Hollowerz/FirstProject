@@ -46,8 +46,8 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         setBackground(Color.DARK_GRAY);
         bot.draw(g2d);
-        player.draw(g2d);
         map.draw(g2d);
+        player.draw(g2d);
 
 
     }
