@@ -9,7 +9,7 @@ public class Player implements Interactable {
     private static final int PLAYER_WIDTH = 40;
     private static final int PLAYER_HEIGHT = 40;
     private Position position;
-    private int speed = 2;
+    private int speed = 3;
 
     public Player(int x, int y) {
         position = new Position(x, y);
@@ -66,9 +66,15 @@ public class Player implements Interactable {
         return (getExpectedCollider(direction).intersects(anotherObject.getCollider()));
     }
 
+    public boolean willCollideMap(Direction direction, Map map) {
+        return map.collideMap(getExpectedCollider(direction));
+    }
+
+
     public Rectangle getCollider() {
         return new Rectangle(position.getX(), position.getY(), PLAYER_WIDTH, PLAYER_HEIGHT);
     }
+
 
     private Rectangle getExpectedCollider(Direction direction) {
         // copy real position to restore after calculations

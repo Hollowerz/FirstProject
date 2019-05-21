@@ -51,13 +51,15 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
-        if (!player.willCollide(direction, bot)) {
+        if ((!player.willCollide(direction, bot)) && (!player.willCollideMap(direction, map))) {
             player.move(direction);
+
         }
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -79,6 +81,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                 direction = null;
         }
     }
+
 
     @Override
     public void keyReleased(KeyEvent e) {
