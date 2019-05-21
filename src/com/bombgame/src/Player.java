@@ -6,8 +6,8 @@ import java.awt.*;
 public class Player implements Interactable {
 
     private static final String PLAYER_IMAGE_PATH = "/images/player.jpg";
-    private static final int PLAYER_WIDTH = 40;
-    private static final int PLAYER_HEIGHT = 40;
+    private static final int PLAYER_WIDTH = 35;
+    private static final int PLAYER_HEIGHT = 35;
     private Position position;
     private int speed = 3;
 
@@ -41,6 +41,7 @@ public class Player implements Interactable {
 
     public void draw(Graphics2D g2d) {
         g2d.drawImage(getPlayerImage(), position.getX(), position.getY(), null);
+        g2d.setColor(Color.BLACK);
         g2d.draw(getCollider());
     }
 
@@ -59,6 +60,8 @@ public class Player implements Interactable {
             case RIGHT:
                 setX(getX() + speed);
                 break;
+
+
         }
     }
 

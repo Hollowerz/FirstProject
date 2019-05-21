@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         JFrame frame = new JFrame("My first game");
         frame.pack();
-        frame.setSize(500, 500);
+        frame.setSize(450, 469);
 
         frame.setResizable(false);
 

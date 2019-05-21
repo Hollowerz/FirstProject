@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Map {
 
-    private static final int MAP_SIZE = 10;
+    private static final int MAP_SIZE = 11;
     private static final int TILE_SIZE = 40;
     private int[][] map = new int[MAP_SIZE][MAP_SIZE];
     private static final int BLOCKED = 1;
@@ -14,12 +14,23 @@ public class Map {
 
 
     public Map() {
-        for (int x = 0; x < MAP_SIZE; x++) {
-            for (int y = 0; y < MAP_SIZE; y++) {
-                map[0][y] = BLOCKED;
-                map[y][0] = BLOCKED;
+        for (int kolumna = 0; kolumna < MAP_SIZE; kolumna++) {
+            for (int wiersz = 0; wiersz < MAP_SIZE; wiersz++) {
+                map[0][wiersz] = BLOCKED;
+                map[kolumna][0] = BLOCKED;
+                map[MAP_SIZE-1][wiersz] = BLOCKED;
+                map[kolumna][MAP_SIZE-1] = BLOCKED;
+                if ( kolumna < MAP_SIZE/2) {
+                    map[kolumna*2][2] = BLOCKED;
+                    map[kolumna*2][4] = BLOCKED;
+                    map[kolumna*2][6] = BLOCKED;
+                    map[kolumna*2][8] = BLOCKED;
+
+
             }
-        }
+
+                }
+            }
         createPlatformList();
     }
 

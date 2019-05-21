@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.Component;
 
 
 public class Game extends JPanel implements ActionListener, KeyListener {
@@ -13,15 +14,18 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     private Timer gameLoopTimer = new Timer(10, this);
     private Player player;
     private Player bot;
+    private Bomb bomb;
     private Direction direction;
+    private boolean gameRunning = true;
+    private boolean bombPlaced = false;
 
     private Map map;
 
     public Game() {
         setFocusable(true);
         gameLoopTimer.start();
-        player = new Player(100, 100);
-        bot = new Player(160, 160);
+        player = new Player(40, 40);
+        bot = new Player(362, 362);
         map = new Map();
         addKeyListener(this);
 
@@ -43,18 +47,28 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         setBackground(Color.DARK_GRAY);
         bot.draw(g2d);
+        if (bombPlaced) bomb.draw(g2d);
         player.draw(g2d);
         map.draw(g2d);
+
 
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        repaint();
-        if ((!player.willCollide(direction, bot)) && (!player.willCollideMap(direction, map))) {
-            player.move(direction);
+        if (gameRunning) {
+            repaint();
+            if ((!player.willCollide(direction, bot)) && (!player.willCollideMap(direction, map))) {
+                player.move(direction);
+            }
+            if ((player.willCollide(direction, bot))) {
+                gameRunning = false;
+                JOptionPane.showMessageDialog(null, "Вы сделали кусь, спасибо!");
 
+            }
         }
+
+
     }
 
     @Override
@@ -77,6 +91,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             case KeyEvent.VK_UP:
                 direction = Direction.UP;
                 break;
+            case KeyEvent.VK_SPACE:
+                bombPlaced = true;
+                bomb = new Bomb(player.getX(), player.getY());
             default:
                 direction = null;
         }
