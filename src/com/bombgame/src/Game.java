@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.Component;
+
 
 
 public class Game extends JPanel implements ActionListener, KeyListener {
@@ -14,10 +14,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     private Timer gameLoopTimer = new Timer(10, this);
     private Player player;
     private Player bot;
-    private Bomb bomb;
     private Direction direction;
     private boolean gameRunning = true;
-    private boolean bombPlaced = false;
+
 
     private Map map;
 
@@ -47,7 +46,6 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         setBackground(Color.DARK_GRAY);
         bot.draw(g2d);
-        if (bombPlaced) bomb.draw(g2d);
         player.draw(g2d);
         map.draw(g2d);
 
@@ -92,8 +90,9 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                 direction = Direction.UP;
                 break;
             case KeyEvent.VK_SPACE:
-                bombPlaced = true;
-                bomb = new Bomb(player.getX(), player.getY());
+                map.placeBomb(player.getX(), player.getY());
+
+
             default:
                 direction = null;
         }

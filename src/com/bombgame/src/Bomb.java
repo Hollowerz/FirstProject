@@ -1,13 +1,15 @@
-package com.bombgame.src;
+/*package com.bombgame.src;
 
 import java.awt.*;
 
 public class Bomb implements Interactable {
     private Position position;
+    private boolean isPlaced;
     private static final int BOMB_SIZE = 35;
 
     public Bomb(int x, int y) {
         position = new Position(x, y);
+        isPlaced = false;
     }
 
     public void draw(Graphics2D g2d) {
@@ -15,9 +17,14 @@ public class Bomb implements Interactable {
         g2d.drawRect(getX(), getY(), BOMB_SIZE, BOMB_SIZE);
         g2d.fillRect(getX(), getY(), BOMB_SIZE, BOMB_SIZE);
     }
+    public boolean getStatus() {
+        return isPlaced;
+    }
 
-    public void placeBomb(int x, int y) {
-
+    public void setStatus(boolean status) {
+        isPlaced = status;
+    }
+    public void logicBomb() {
 
     }
 
@@ -44,4 +51,4 @@ public class Bomb implements Interactable {
     }
 
 
-}
+} */
