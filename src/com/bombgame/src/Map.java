@@ -24,7 +24,7 @@ public class Map {
     private static final int BOMB_EXPLODE_RADIUS = 3;
     private static final int BOMB_COUNT = 3;
     private static final String BOOM_IMAGE_PATH = "/images/boom.jpg";
-    //private static final String BLOCK_IMAGE_PATH = "/images/block.jpg";
+    private static final String BLOCK_IMAGE_PATH = "/images/block.jpg";
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
 
@@ -90,12 +90,12 @@ public class Map {
 
     public void drawMap(Graphics2D g2d) {
         for (Rectangle platform : platforms) {
-            g2d.setColor(Color.LIGHT_GRAY);
-            g2d.fillRect(platform.x, platform.y, TILE_SIZE, TILE_SIZE);
-            g2d.setColor(Color.BLACK);
-            g2d.drawRect(platform.x, platform.y, TILE_SIZE, TILE_SIZE);
+            //g2d.setColor(Color.LIGHT_GRAY);
+            //g2d.fillRect(platform.x, platform.y, TILE_SIZE, TILE_SIZE);
+            //g2d.setColor(Color.BLACK);
+            //g2d.drawRect(platform.x, platform.y, TILE_SIZE, TILE_SIZE);
 
-            //g2d.drawImage(getBlockImage(), platform.x, platform.y, null);
+            g2d.drawImage(getBlockImage(), platform.x, platform.y, null);
             g2d.setColor(Color.DARK_GRAY);
             g2d.fillRect(0, 0, 100, 30);
             g2d.setColor(Color.BLACK);
@@ -197,6 +197,11 @@ public class Map {
     private Image getBoomImage() {
 
         ImageIcon i = new ImageIcon(getClass().getResource(BOOM_IMAGE_PATH));
+        return i.getImage();
+    }
+    private Image getBlockImage() {
+
+        ImageIcon i = new ImageIcon(getClass().getResource(BLOCK_IMAGE_PATH));
         return i.getImage();
     }
 
