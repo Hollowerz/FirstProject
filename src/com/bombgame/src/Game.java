@@ -10,7 +10,7 @@ import java.awt.event.KeyListener;
 
 public class Game extends JPanel implements ActionListener, KeyListener {
 
-    private Timer gameLoopTimer = new Timer(10, this);
+    private Timer gameLoopTimer;
     private Player player;
     private Bot bot;
     private Bot bot2;
@@ -25,12 +25,13 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
     public Game() {
         setFocusable(true);
-        gameLoopTimer.start();
         player = new Player(45, 45);
         bot = new Bot(410, 410);
         bot2 = new Bot(46, 410);
         map = new Map();
         addKeyListener(this);
+        gameLoopTimer = new Timer(10, this);
+        gameLoopTimer.start();
 
 
     }

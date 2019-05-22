@@ -23,12 +23,15 @@ public class Map {
     private boolean nowExploding = false;
     private static final int BOMB_EXPLODE_RADIUS = 3;
     private static final int BOMB_COUNT = 3;
-    private static final String BOOM_IMAGE_PATH = "/images/boom.jpg";
-    private static final String BLOCK_IMAGE_PATH = "/images/block.jpg";
+    private final Image BOOM_IMAGE;
+    private final Image BLOCK_IMAGE;
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
 
     public Map() {
+        BOOM_IMAGE = new ImageIcon(getClass().getResource("/images/boom.jpg")).getImage();
+        BLOCK_IMAGE = new ImageIcon(getClass().getResource("/images/block.jpg")).getImage();
+
         for (int kolumna = 0; kolumna < MAP_SIZE; kolumna++) {
             for (int wiersz = 0; wiersz < MAP_SIZE; wiersz++) {
                 map[kolumna][wiersz] = CLEAR;
@@ -80,7 +83,7 @@ public class Map {
             for (Rectangle explosion : explosion) {
                 //g2d.setColor(Color.ORANGE);
                 //g2d.fillRect(explosion.x, explosion.y, TILE_SIZE, TILE_SIZE);
-                g2d.drawImage(getBoomImage(), explosion.x, explosion.y, null);
+                g2d.drawImage(BOOM_IMAGE, explosion.x, explosion.y, null);
 
 
             }
@@ -95,7 +98,7 @@ public class Map {
             //g2d.setColor(Color.BLACK);
             //g2d.drawRect(platform.x, platform.y, TILE_SIZE, TILE_SIZE);
 
-            g2d.drawImage(getBlockImage(), platform.x, platform.y, null);
+            g2d.drawImage(BLOCK_IMAGE, platform.x, platform.y, null);
             g2d.setColor(Color.DARK_GRAY);
             g2d.fillRect(0, 0, 100, 30);
             g2d.setColor(Color.BLACK);
@@ -192,17 +195,6 @@ public class Map {
 
         };
         executor.schedule(explodeBomb, 400, TimeUnit.MILLISECONDS);
-    }
-
-    private Image getBoomImage() {
-
-        ImageIcon i = new ImageIcon(getClass().getResource(BOOM_IMAGE_PATH));
-        return i.getImage();
-    }
-    private Image getBlockImage() {
-
-        ImageIcon i = new ImageIcon(getClass().getResource(BLOCK_IMAGE_PATH));
-        return i.getImage();
     }
 
     public boolean collideExplosion(Rectangle player) {
