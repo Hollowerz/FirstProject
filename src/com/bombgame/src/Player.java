@@ -6,8 +6,8 @@ import java.awt.*;
 public class Player implements Interactable {
 
     private static final String PLAYER_IMAGE_PATH = "/images/player.jpg";
-    private static final int PLAYER_WIDTH = 35;
-    private static final int PLAYER_HEIGHT = 35;
+    private static final int PLAYER_WIDTH = 30;
+    private static final int PLAYER_HEIGHT = 30;
     private Position position;
     private int speed = 2;
 
@@ -64,6 +64,8 @@ public class Player implements Interactable {
 
         }
     }
+
+
 
     public boolean willCollide(Direction direction, Interactable anotherObject) {
         return (getExpectedCollider(direction).intersects(anotherObject.getCollider()));

@@ -4,9 +4,9 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("My first game");
+        JFrame frame = new JFrame("Bomberman clone");
         frame.pack();
-        frame.setSize(450, 469);
+        frame.setSize(520, 540);
 
         frame.setResizable(false);
 
