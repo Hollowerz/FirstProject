@@ -1,5 +1,6 @@
 package com.bombgame.src;
 
+import com.bombgame.src.enums.Direction;
 import com.bombgame.src.util.ImageHolder;
 
 import java.awt.*;

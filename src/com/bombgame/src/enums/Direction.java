@@ -1,4 +1,4 @@
-package com.bombgame.src;
+package com.bombgame.src.enums;
 
 public enum Direction {
     UP,

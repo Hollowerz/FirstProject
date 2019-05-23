@@ -1,5 +1,7 @@
 package com.bombgame.src;
 
+import com.bombgame.src.enums.Direction;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

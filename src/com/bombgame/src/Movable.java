@@ -1,5 +1,7 @@
 package com.bombgame.src;
 
-public interface Movable {
+import com.bombgame.src.enums.Direction;
+
+public interface Movable extends Placeable {
     void move(Direction direction);
 }

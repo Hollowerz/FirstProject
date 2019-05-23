@@ -1,5 +1,7 @@
 package com.bombgame.src;
 
+import com.bombgame.src.enums.Direction;
+
 import java.awt.*;
 
 public class Player extends Person {
