@@ -6,43 +6,38 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class Game extends JPanel implements ActionListener, KeyListener {
 
-    private Timer gameLoopTimer;
-    private Player player;
-    private Bot bot;
-    private Bot bot2;
+    private Timer gameLoopTimer = new Timer(10, this);
+    private Player player = new Player(45, 45);
+    private List<Bot> botList;
     private Direction direction;
 
     private boolean gameRunning = true;
-    private boolean bot1Alive = true;
-    private boolean bot2Alive = true;
-
-
-    private Map map;
+    private Map map = new Map();
+    private byte deadBots = 0;
 
     public Game() {
         setFocusable(true);
-        player = new Player(45, 45);
-        bot = new Bot(410, 410);
-        bot2 = new Bot(46, 410);
-        map = new Map();
+        createBots();
         addKeyListener(this);
-        gameLoopTimer = new Timer(10, this);
         gameLoopTimer.start();
-
-
     }
 
-    /*
-    public Image getBackgroudImage() {
+    private void createBots() {
+        botList = Arrays.asList(
+                new Bot(410, 410),
+                new Bot(46, 410)
+        );
 
-        ImageIcon i = new ImageIcon(getClass().getResource("/images/player.jpg"));
-        return i.getImage();
-    } */
-
+        for (int i = 0; i < botList.size(); i++) {
+            botList.get(i).setName("Bot #" + (i + 1));
+        }
+    }
 
     @Override
     public void paint(Graphics g) {
@@ -53,64 +48,57 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         setBackground(Color.DARK_GRAY);
 
         map.draw(g2d);
-        if (bot1Alive) {
-            bot.draw(g2d);
-        } else bot.drawBotDeadMessage(g2d, "BOT 1",8,12);
-        if (bot2Alive) {
-            bot2.draw(g2d);
-        } else bot.drawBotDeadMessage(g2d, "BOT 2",8,27);
         player.draw(g2d);
 
+        botList.forEach(bot -> {
+            if (bot.isAlive()) {
+                bot.draw(g2d);
+            } else {
+                drawBotDeadMessage(g2d, bot.getName(), 3, (deadBots + 1) * 13);
+            }
+        });
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (gameRunning) {
-
             repaint();
-
             //updating bots if they are alive
-            if (bot2Alive) bot2.updateBot(map);
-            if (bot1Alive) bot.updateBot(map);
+            botList.stream().filter(Person::isAlive).forEach(bot -> bot.update(map));
+
             //player movement checking for collision
-            if ((!player.willCollide(direction, bot)) && (!player.willCollideMap(direction, map))) {
+            if (botList.stream().filter(Person::isAlive).noneMatch(bot -> player.willCollide(direction, bot))
+                    && !player.willCollideMap(direction, map)) {
                 player.move(direction);
             }
 
-            //checking collision for bots with player
-            if ((player.willCollide(direction, bot)) || (bot.willCollide(direction, player))) {
-                gameRunning = false;
-                JOptionPane.showMessageDialog(null, "YOU DEAD");
+            //checking collision for bots with player & explosion
+            botList.stream().filter(Person::isAlive).forEach(bot -> {
+                if (player.willCollide(direction, bot) || bot.willCollide(direction, player)) {
+                    gameRunning = false;
+                    JOptionPane.showMessageDialog(null, "YOU DEAD");
+                }
+                if (map.collideExplosion(bot.getCollider())) {
+                    bot.setAlive(false);
+                    deadBots++;
+                }
+            });
 
-            }
             if (map.collideExplosion(player.getCollider())) {
                 JOptionPane.showMessageDialog(null, "SUICIDE, GOOD JOB");
                 gameRunning = false;
             }
-            if (map.collideExplosion(bot2.getCollider())) {
-                //gameRunning = false;
-                bot2Alive = false;
 
-
-                //JOptionPane.showMessageDialog(null, "PLAYER 1 WINS");
-            }
-            if (map.collideExplosion(bot.getCollider())) {
-                bot1Alive = false;
-
-            }
-            if (!bot1Alive && !bot2Alive) {
+            if (botList.stream().noneMatch(Person::isAlive)) {
                 gameRunning = false;
                 JOptionPane.showMessageDialog(null, "YOU WIN");
             }
-
         }
     }
-
 
     @Override
     public void keyTyped(KeyEvent e) {
     }
-
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -130,18 +118,18 @@ public class Game extends JPanel implements ActionListener, KeyListener {
                 break;
             case KeyEvent.VK_SPACE:
                 map.placeBomb(player.getX(), player.getY());
-
-
             default:
                 direction = null;
         }
-
-
     }
-
 
     @Override
     public void keyReleased(KeyEvent e) {
         direction = null;
+    }
+
+    private void drawBotDeadMessage(Graphics2D g2d, String botName, int x, int y) {
+        g2d.setColor(Color.RED);
+        g2d.drawString(botName + " IS DEAD", x, y);
     }
 }
