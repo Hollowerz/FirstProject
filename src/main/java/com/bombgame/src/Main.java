@@ -4,16 +4,24 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
+
         JFrame frame = new JFrame("Bomberman clone");
         frame.pack();
-        frame.setSize(520, 540);
+        frame.setSize(500, 600);
 
         frame.setResizable(false);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.setBounds(100,100,500,500);  // position
         frame.setLocationRelativeTo(null);  //position of window
-        frame.add(new Game());
+        final String[] bots = { "1", "2", "3", "4", "5" };
+        String botCount = (String) JOptionPane.showInputDialog(frame,
+                "Ile chcesz botów?",
+                "Ustaw ilość botów",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                bots,
+                bots[0]);
+        frame.add(new Game(botCount));
         frame.setVisible(true);
     }
 }

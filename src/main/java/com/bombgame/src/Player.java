@@ -12,8 +12,8 @@ public class Player extends Person {
 
     public void draw(Graphics2D g2d) {
         g2d.drawImage(getImage(), getX(), getY(), null);
-        g2d.setColor(Color.BLACK);
-        g2d.draw(getCollider());
+        //g2d.setColor(Color.BLACK);
+        //g2d.draw(getCollider());
     }
 
     public boolean willCollide(Direction direction, Interactable anotherObject) {

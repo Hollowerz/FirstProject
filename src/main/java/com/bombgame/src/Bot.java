@@ -1,6 +1,7 @@
 package com.bombgame.src;
 
 import com.bombgame.src.enums.Direction;
+import com.bombgame.src.enums.MapTile;
 
 import java.awt.*;
 import java.util.Random;
@@ -37,20 +38,22 @@ public class Bot extends Person {
             if (!willCollideMap(direction, map)) {
                 move(direction);
             }
-            map.placeBomb(getX(), getY());
+
             Runnable explodeBomb = () -> {
+                map.placeBomb(getX(), getY());
                 direction = getRandomDirection();
+                if (map.checkTile(getX(),getY(), MapTile.EXPOSION_WAVE)){
+                    direction = getRandomDirection();
+                }
 
             };
-            executor.schedule(explodeBomb, 1000, TimeUnit.MILLISECONDS);
+            executor.schedule(explodeBomb, 2000, TimeUnit.MILLISECONDS);
 
         }
     }
 
     public void draw(Graphics2D g2d) {
         g2d.drawImage(getImage(), getX(), getY(), null);
-        g2d.setColor(Color.BLACK);
-        g2d.draw(getCollider());
     }
 
     private Direction getRandomDirection() {

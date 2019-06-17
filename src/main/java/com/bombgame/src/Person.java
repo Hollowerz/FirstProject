@@ -56,6 +56,10 @@ public class Person implements Interactable, Movable {
         return image;
     }
 
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
     public Rectangle getCollider() {
         return new Rectangle(getX(), getY(), WIDTH, HEIGHT);
     }

@@ -24,6 +24,7 @@ public class Map {
     private static final int BOMB_COUNT = 3;
     private final Image boomImage = ImageHolder.getBoomImage();
     private final Image blockImage = ImageHolder.getBlockImage();
+    private final Image bombImage = ImageHolder.getBombImage();
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
 
@@ -59,6 +60,13 @@ public class Map {
         }
     }
 
+    public boolean checkTile( int x, int y, Enum tile) {
+        if (map[x][y]== tile) {
+            return true;
+        }
+        return false;
+    }
+
     public void draw(Graphics2D g2d) {
         /*for (Rectangle platform : platforms) {
             g2d.setColor(Color.LIGHT_GRAY);
@@ -73,10 +81,11 @@ public class Map {
             g2d.drawRect(0,0,100,30);
         } */
         for (Rectangle bomb : bombs) {
-            g2d.setColor(Color.RED);
-            g2d.fillRect(bomb.x, bomb.y, TILE_SIZE, TILE_SIZE);
-            g2d.setColor(Color.BLACK);
-            g2d.drawRect(bomb.x, bomb.y, TILE_SIZE, TILE_SIZE);
+            //g2d.setColor(Color.RED);
+            //g2d.fillRect(bomb.x, bomb.y, TILE_SIZE, TILE_SIZE);
+            //g2d.setColor(Color.BLACK);
+            //g2d.drawRect(bomb.x, bomb.y, TILE_SIZE, TILE_SIZE);
+            g2d.drawImage(bombImage, bomb.x, bomb.y, null);
         }
         if (nowExploding) {
             for (Rectangle explosion : explosion) {
@@ -92,11 +101,6 @@ public class Map {
 
     public void drawMap(Graphics2D g2d) {
         for (Rectangle platform : platforms) {
-            //g2d.setColor(Color.LIGHT_GRAY);
-            //g2d.fillRect(platform.x, platform.y, TILE_SIZE, TILE_SIZE);
-            //g2d.setColor(Color.BLACK);
-            //g2d.drawRect(platform.x, platform.y, TILE_SIZE, TILE_SIZE);
-
             g2d.drawImage(blockImage, platform.x, platform.y, null);
             g2d.setColor(Color.DARK_GRAY);
             g2d.fillRect(0, 0, 100, 30);
