@@ -20,12 +20,14 @@ public class Map {
     private List<Rectangle> bombs = new CopyOnWriteArrayList<>();
     private List<Rectangle> explosion = new CopyOnWriteArrayList<>();
     private boolean nowExploding = false;
+    private boolean bombPlaced;
     private static final int BOMB_EXPLODE_RADIUS = 3;
     private static final int BOMB_COUNT = 3;
     private final Image boomImage = ImageHolder.getBoomImage();
     private final Image blockImage = ImageHolder.getBlockImage();
     private final Image bombImage = ImageHolder.getBombImage();
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+    private int bombPlacedCount = 0;
 
 
     public Map() {
@@ -60,43 +62,17 @@ public class Map {
         }
     }
 
-    public boolean checkTile( int x, int y, Enum tile) {
-        if (map[x][y]== tile) {
-            return true;
-        }
-        return false;
-    }
 
     public void draw(Graphics2D g2d) {
-        /*for (Rectangle platform : platforms) {
-            g2d.setColor(Color.LIGHT_GRAY);
-            g2d.fillRect(platform.x, platform.y, TILE_SIZE, TILE_SIZE);
-            g2d.setColor(Color.BLACK);
-            g2d.drawRect(platform.x, platform.y, TILE_SIZE, TILE_SIZE);
-
-            //g2d.drawImage(getBlockImage(), platform.x, platform.y, null);
-            g2d.setColor(Color.DARK_GRAY);
-            g2d.fillRect(0, 0, 100, 30);
-            g2d.setColor(Color.BLACK);
-            g2d.drawRect(0,0,100,30);
-        } */
         for (Rectangle bomb : bombs) {
-            //g2d.setColor(Color.RED);
-            //g2d.fillRect(bomb.x, bomb.y, TILE_SIZE, TILE_SIZE);
-            //g2d.setColor(Color.BLACK);
-            //g2d.drawRect(bomb.x, bomb.y, TILE_SIZE, TILE_SIZE);
             g2d.drawImage(bombImage, bomb.x, bomb.y, null);
         }
         if (nowExploding) {
             for (Rectangle explosion : explosion) {
-                //g2d.setColor(Color.ORANGE);
-                //g2d.fillRect(explosion.x, explosion.y, TILE_SIZE, TILE_SIZE);
                 g2d.drawImage(boomImage, explosion.x, explosion.y, null);
-
-
             }
-
         }
+
     }
 
     public void drawMap(Graphics2D g2d) {
@@ -137,10 +113,8 @@ public class Map {
     }
 
     public void placeBomb(int x, int y) {
-
         int bX = x / TILE_SIZE;
         int bY = y / TILE_SIZE;
-        int bombPlacedCount = 0;
         for (int kolumna = 0; kolumna < MAP_SIZE; kolumna++) {
             for (int wiersz = 0; wiersz < MAP_SIZE; wiersz++) {
                 if (map[kolumna][wiersz] == MapTile.BOMB) bombPlacedCount++;
@@ -149,20 +123,23 @@ public class Map {
         if (bombPlacedCount < BOMB_COUNT) {
             map[bX][bY] = MapTile.BOMB;
             createObjectList();
+            bombPlaced = true;
         }
 
 
         Runnable explodeBomb = () -> {
-            explode(bX, bY);
+            if (map[bX][bY] == MapTile.BOMB) explode(bX, bY);
             bombs.clear();
             createObjectList();
-
+            bombPlacedCount--;
         };
         executor.schedule(explodeBomb, 2000, TimeUnit.MILLISECONDS);
+
 
     }
 
     public void explode(int x, int y) {
+
         nowExploding = true;
         map[x][y] = MapTile.EXPOSION_WAVE;
         for (int j = 0; j < BOMB_EXPLODE_RADIUS; j++) {
@@ -195,9 +172,10 @@ public class Map {
             }
             explosion.clear();
             createObjectList();
-
+            nowExploding = false;
         };
-        executor.schedule(explodeBomb, 400, TimeUnit.MILLISECONDS);
+        executor.schedule(explodeBomb, 500, TimeUnit.MILLISECONDS);
+
     }
 
     public boolean collideExplosion(Rectangle player) {

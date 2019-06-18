@@ -1,23 +1,34 @@
 package com.bombgame.src;
 
 import com.bombgame.src.enums.Direction;
-import com.bombgame.src.util.ImageHolder;
 
 import java.awt.*;
+import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Person implements Interactable, Movable {
     protected static final int WIDTH = 30;
     protected static final int HEIGHT = 30;
+    private static Random randomGenerator = new Random();
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+
+    private Direction direction;
 
     private Position position;
     private int speed;
-    private final Image image = ImageHolder.getPlayerImage();
     private boolean isAlive = true;
     private String name;
 
     protected Person(int x, int y, int speed) {
         position = new Position(x, y);
         this.speed = speed;
+        direction = getRandomDirection();
+    }
+
+    private Direction getRandomDirection() {
+        return Direction.values()[randomGenerator.nextInt(4)];
     }
 
     public int getX() {
@@ -52,9 +63,6 @@ public class Person implements Interactable, Movable {
         isAlive = alive;
     }
 
-    public Image getImage() {
-        return image;
-    }
 
     public void setSpeed(int speed) {
         this.speed = speed;
@@ -76,6 +84,42 @@ public class Person implements Interactable, Movable {
 
         return expectedCollider;
     }
+
+    /**
+     * fffqwfqwf fsdfsdfffsdfsdggsdff
+     *
+     * @param map
+     */
+    public void update(Map map) {
+
+        if (!willCollideMap(direction, map)) {
+            move(direction);
+        }
+        if (willCollideMap(direction, map)) {
+            direction = getRandomDirection();
+            if (!willCollideMap(direction, map)) {
+                move(direction);
+            }
+
+            Runnable explodeBomb = () -> {
+                if (isAlive) map.placeBomb(getX(), getY());
+                direction = getRandomDirection();
+
+
+            };
+            executor.schedule(explodeBomb, 2000, TimeUnit.MILLISECONDS);
+
+        }
+    }
+
+    public boolean willCollide(Direction direction, Interactable anotherObject) {
+        return (getExpectedCollider(direction).intersects(anotherObject.getCollider()));
+    }
+
+    public boolean willCollideMap(Direction direction, Map map) {
+        return map.collideMap(getExpectedCollider(direction));
+    }
+
 
     public void move(Direction direction) {
         if (direction == null) return;
